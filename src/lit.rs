@@ -1021,17 +1021,17 @@ mod value {
         let base = match (byte(s, 0), byte(s, 1)) {
             (b'0', b'x') => {
                 s = &s[2..];
-                16
+                16u64
             }
             (b'0', b'o') => {
                 s = &s[2..];
-                8
+                8u64
             }
             (b'0', b'b') => {
                 s = &s[2..];
-                2
+                2u64
             }
-            (b'0'...b'9', _) => 10,
+            (b'0'...b'9', _) => 10u64,
             _ => unreachable!(),
         };
 
@@ -1040,16 +1040,16 @@ mod value {
             let b = byte(s, 0);
             let digit = match b {
                 b'0'...b'9' => u64::from(b - b'0'),
-                b'a'...b'f' if base > 10 => 10 + u64::from(b - b'a'),
-                b'A'...b'F' if base > 10 => 10 + u64::from(b - b'A'),
+                b'a'...b'f' if base > 10u64 => 10u64 + u64::from(b - b'a'),
+                b'A'...b'F' if base > 10u64 => 10u64 + u64::from(b - b'A'),
                 b'_' => {
                     s = &s[1..];
                     continue;
                 }
                 // NOTE: Looking at a floating point literal, we don't want to
                 // consider these integers.
-                b'.' if base == 10 => return None,
-                b'e' | b'E' if base == 10 => return None,
+                b'.' if base == 10u64 => return None,
+                b'e' | b'E' if base == 10u64 => return None,
                 _ => break,
             };
 
